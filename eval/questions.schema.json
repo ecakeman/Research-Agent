@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchAgentEvalCase",
+  "type": "object",
+  "required": ["id", "category", "question", "expected_sources", "expected_claims"],
+  "properties": {
+    "id": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["fact", "comparison", "multi-hop", "insufficient", "ambiguous"]
+    },
+    "question": { "type": "string" },
+    "expected_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "expected_claims": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": true
+}

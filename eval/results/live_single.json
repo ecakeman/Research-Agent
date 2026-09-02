@@ -1,0 +1,331 @@
+{
+  "baseline": "agentic",
+  "model_routing": "single",
+  "live": true,
+  "cases": 60,
+  "completed": 0,
+  "abstained": 0,
+  "failed": 60,
+  "case_results": [
+    {
+      "id": "q001",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q002",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q003",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q004",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q005",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q006",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q007",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q008",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q009",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q010",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q011",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q012",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q013",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q014",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q015",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q016",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q017",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q018",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q019",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q020",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q021",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q022",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q023",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q024",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q025",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q026",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q027",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q028",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q029",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q030",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q031",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q032",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q033",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q034",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q035",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q036",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q037",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q038",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q039",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q040",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q041",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q042",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q043",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q044",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q045",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q046",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q047",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q048",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q049",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q050",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q051",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q052",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q053",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q054",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q055",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q056",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q057",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q058",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q059",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    },
+    {
+      "id": "q060",
+      "status": "failed",
+      "error": "Client error '402 Payment Required' for url 'https://api.deepseek.com/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402"
+    }
+  ],
+  "recall_5": null,
+  "recall_10": null,
+  "mrr": null,
+  "ndcg_10": null,
+  "groundedness": null,
+  "citation_precision": null,
+  "citation_recall": null,
+  "correct_abstention": null,
+  "first_pass_insufficient": 0,
+  "rewrite_attempted": 0,
+  "rewrite_recovered": 0,
+  "rewrite_recovery_rate": null,
+  "avg_latency_ms": null,
+  "total_tokens": 0,
+  "pro_calls": 0,
+  "fast_calls": 0,
+  "concurrency": 8,
+  "start_time": "2026-09-02T09:03:55.986267+00:00",
+  "end_time": "2026-09-02T09:04:02.599269+00:00",
+  "duration_s": 6.613002
+}

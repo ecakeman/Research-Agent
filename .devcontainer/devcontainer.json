@@ -1,0 +1,25 @@
+{
+  "name": "research-agent",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "APT_MIRROR": "${localEnv:APT_MIRROR:https://mirrors.aliyun.com}",
+      "PIP_INDEX": "${localEnv:PIP_INDEX:https://pypi.tuna.tsinghua.edu.cn/simple}"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    }
+  },
+  "forwardPorts": [8090, 5433],
+  "postCreateCommand": "python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -e '.[dev]'",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  }
+}
