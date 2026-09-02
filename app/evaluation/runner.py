@@ -177,6 +177,12 @@ def _live_one(case: dict, baseline: str) -> dict:
     result = execute_research(case["question"], baseline=baseline)
     scored = score_live_case(case, result)
     scored["id"] = case.get("id")
+    scored["retrieval_rounds"] = result.get("retrieval_rounds")
+    scored["first_pass_evidence_sufficient"] = result.get("first_pass_evidence_sufficient")
+    scored["rewritten_query"] = result.get("rewritten_query")
+    scored["citations"] = result.get("citations")
+    scored["failure_reason"] = result.get("failure_reason")
+    scored["answer"] = result.get("answer")
     return scored
 
 

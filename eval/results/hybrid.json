@@ -518,11 +518,12 @@
   "citation_recall": null,
   "correct_abstention": null,
   "first_pass_insufficient": null,
+  "eligible_for_recovery": null,
   "rewrite_attempted": null,
   "rewrite_recovered": null,
   "rewrite_recovery_rate": null,
-  "concurrency": 8,
-  "start_time": "2026-09-02T08:45:53.227045+00:00",
-  "end_time": "2026-09-02T08:45:57.319659+00:00",
-  "duration_s": 4.092614
+  "concurrency": 16,
+  "start_time": "2026-09-02T11:12:19.626625+00:00",
+  "end_time": "2026-09-02T11:12:22.403956+00:00",
+  "duration_s": 2.777331
 }

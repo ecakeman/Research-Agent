@@ -1,5 +1,5 @@
 {
-  "baseline": "vector",
+  "baseline": "rerank",
   "model_routing": "single",
   "live": false,
   "note": null,
@@ -272,10 +272,10 @@
     {
       "id": "q030",
       "status": "completed",
-      "recall_5": 0.5,
-      "recall_10": 0.5,
+      "recall_5": 1.0,
+      "recall_10": 1.0,
       "mrr": 1.0,
-      "ndcg_10": 0.6131471927654584,
+      "ndcg_10": 1.0,
       "expected_abs": false
     },
     {
@@ -290,10 +290,10 @@
     {
       "id": "q032",
       "status": "completed",
-      "recall_5": 1.0,
-      "recall_10": 1.0,
+      "recall_5": 0.5,
+      "recall_10": 0.5,
       "mrr": 1.0,
-      "ndcg_10": 1.0,
+      "ndcg_10": 0.6131471927654584,
       "expected_abs": false
     },
     {
@@ -317,10 +317,10 @@
     {
       "id": "q035",
       "status": "completed",
-      "recall_5": 1.0,
-      "recall_10": 1.0,
+      "recall_5": 0.5,
+      "recall_10": 0.5,
       "mrr": 1.0,
-      "ndcg_10": 1.0,
+      "ndcg_10": 0.6131471927654584,
       "expected_abs": false
     },
     {
@@ -430,10 +430,10 @@
     {
       "id": "q052",
       "status": "completed",
-      "recall_5": 1.0,
-      "recall_10": 1.0,
+      "recall_5": 0.5,
+      "recall_10": 0.5,
       "mrr": 1.0,
-      "ndcg_10": 1.0,
+      "ndcg_10": 0.6131471927654584,
       "expected_abs": false
     },
     {
@@ -468,8 +468,8 @@
       "status": "completed",
       "recall_5": 1.0,
       "recall_10": 1.0,
-      "mrr": 0.3333333333333333,
-      "ndcg_10": 0.5,
+      "mrr": 0.5,
+      "ndcg_10": 0.6309297535714575,
       "expected_abs": false
     },
     {
@@ -509,21 +509,20 @@
       "expected_abs": false
     }
   ],
-  "recall_5": 0.95,
-  "recall_10": 0.95,
-  "mrr": 0.9866666666666667,
-  "ndcg_10": 0.9513147192765459,
+  "recall_5": 0.93,
+  "recall_10": 0.93,
+  "mrr": 0.99,
+  "ndcg_10": 0.9384592020585933,
   "groundedness": null,
   "citation_precision": null,
   "citation_recall": null,
   "correct_abstention": null,
   "first_pass_insufficient": null,
-  "eligible_for_recovery": null,
   "rewrite_attempted": null,
   "rewrite_recovered": null,
   "rewrite_recovery_rate": null,
-  "concurrency": 16,
-  "start_time": "2026-09-02T11:12:16.474048+00:00",
-  "end_time": "2026-09-02T11:12:19.625016+00:00",
-  "duration_s": 3.150968
+  "concurrency": 8,
+  "start_time": "2026-09-02T08:45:57.320636+00:00",
+  "end_time": "2026-09-02T08:46:04.094250+00:00",
+  "duration_s": 6.773614
 }
