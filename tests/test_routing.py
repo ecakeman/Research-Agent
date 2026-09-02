@@ -5,7 +5,7 @@ from app.graph.workflow import GRAPH_NODES, build_graph, run_research
 from app.models.routing import ModelRole, ModelRouter, answer_role
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, TaggedLLM
+from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
@@ -45,7 +45,7 @@ def _research_handler(blob, _):
                 "covers": ["state handling", "control flow", "checkpointing"],
             }
         return {"chunk_id": "c-noise", "relevant": False, "support_level": "none", "reason": "off", "covers": []}
-    if "Rewrite the search query" in blob:
+    if is_rewrite_prompt(blob):
         return {"rewritten_query": "LangGraph state control flow checkpointing", "focus": ["checkpointing"]}
     if "Extract evidence items" in blob:
         return {"claim": "State is shared", "quote": "State stores the shared structure."}
@@ -140,6 +140,17 @@ def test_t4_graph_topology_unchanged():
     compiled = build_graph(deps)
     names = set(compiled.get_graph().nodes.keys()) - {"__start__", "__end__"}
     assert names == set(GRAPH_NODES)
+    assert GRAPH_NODES == (
+        "analyze_query",
+        "retrieve",
+        "rerank",
+        "grade_evidence",
+        "rewrite_query",
+        "compress_evidence",
+        "generate_answer",
+        "validate_citations",
+        "finalize",
+    )
     assert answer_role(0) is ModelRole.PRO
     assert answer_role(1) is ModelRole.FAST
     assert answer_role(2) is ModelRole.PRO

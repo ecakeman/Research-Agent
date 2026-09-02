@@ -34,12 +34,17 @@ class FakeLLM(LLMClient):
         return data
 
 
+def is_rewrite_prompt(blob: str) -> bool:
+    b = blob.lower()
+    return "rewrite the search query" in b or "query rewriting component" in b
+
+
 def _task(blob: str) -> str:
     if "analyze a technical research question" in blob.lower() or "You analyze a technical" in blob:
         return "analyze"
     if "Judge whether a chunk supports" in blob:
         return "grade"
-    if "Rewrite the search query" in blob:
+    if is_rewrite_prompt(blob):
         return "rewrite"
     if "Extract evidence items" in blob:
         return "compress"

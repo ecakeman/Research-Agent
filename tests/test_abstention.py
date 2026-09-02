@@ -3,7 +3,7 @@ from app.graph.workflow import run_research
 from app.models.routing import ModelRouter
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker
+from tests.fakes import FakeLLM, FakeReranker, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
@@ -33,7 +33,7 @@ def test_f1_two_rounds_then_abstain():
                 "reason": "unrelated",
                 "covers": [],
             }
-        if "Rewrite the search query" in blob:
+        if is_rewrite_prompt(blob):
             return {"rewritten_query": "LangGraph checkpointing internals", "focus": ["checkpointing"]}
         return {}
 

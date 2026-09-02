@@ -35,14 +35,22 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "Rewrite the search query to find missing evidence. JSON only: "
-            '{{"rewritten_query":"...","focus":["..."]}}. '
-            "Stay faithful to the original question. Do not add facts not implied by the question.",
+            "You are a query rewriting component for retrieval. First identify the evidence gaps, "
+            "then write a targeted search query that would retrieve documents filling those gaps. "
+            'JSON only: {{"rewritten_query":"...","focus":["..."]}}. '
+            "focus must list the concrete missing sub-questions or evidence gaps. "
+            "You may extract retrieval terms from the original question, sub-questions, and observed evidence "
+            "(titles, sections, quotes). Do not guess answers. Do not invent facts, APIs, or systems "
+            "that do not appear in the inputs.",
         ),
         (
             "human",
-            "Original: {original_query}\nSub-questions: {sub_questions}\n"
-            "Evidence summary: {evidence_summary}\nFailure: {failure_reasons}",
+            "Original question: {original_query}\n"
+            "Sub-questions: {sub_questions}\n"
+            "Evidence summary:\n{evidence_summary}\n"
+            "Missing sub-questions: {missing_sub_questions}\n"
+            "Evidence gaps: {evidence_gaps}\n"
+            "Failure reasons: {failure_reasons}",
         ),
     ]
 )

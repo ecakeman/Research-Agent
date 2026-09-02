@@ -5,7 +5,7 @@ from app.graph.workflow import run_research
 from app.models.routing import ModelRouter
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, TaggedLLM
+from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str, extra: str = "") -> RetrievedChunk:
@@ -46,7 +46,7 @@ def _base_handler(blob, _):
                 "covers": ["state handling", "control flow", "checkpointing"],
             }
         return {"chunk_id": "c-noise", "relevant": False, "support_level": "none", "reason": "off", "covers": []}
-    if "Rewrite the search query" in blob:
+    if is_rewrite_prompt(blob):
         return {"rewritten_query": "LangGraph state control flow checkpointing", "focus": ["checkpointing"]}
     if "Extract evidence items" in blob:
         return {"claim": "State is shared", "quote": "State stores the shared structure."}

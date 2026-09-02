@@ -1,3 +1,6 @@
+import pytest
+
+from app.errors import RunError
 from app.models.schemas import RetrievedChunk
 from app.retrieval.bm25 import bm25_rank
 from app.retrieval.hybrid import HybridRetriever
@@ -44,6 +47,23 @@ def test_reranker_orders_by_client():
     chunks = [_doc("1", "unrelated"), _doc("2", "LangGraph state object")]
     ranked = Reranker(FakeReranker(), top_k=2).rank("LangGraph state", chunks)
     assert ranked[0].chunk_id == "2"
+
+
+def test_reranker_raises_when_client_fails():
+    class Boom:
+        def rank(self, query, chunks, top_n):
+            raise RuntimeError("rerank api down")
+
+    chunks = [_doc("1", "a"), _doc("2", "b")]
+    with pytest.raises(RunError) as ei:
+        Reranker(Boom(), top_k=2).rank("q", chunks)
+    assert ei.value.node == "rerank"
+
+
+def test_reranker_no_client_truncates_fusion_order():
+    chunks = [_doc("1", "first"), _doc("2", "second"), _doc("3", "third")]
+    ranked = Reranker(None, top_k=2).rank("q", chunks)
+    assert [c.chunk_id for c in ranked] == ["1", "2"]
 
 
 def test_langchain_retriever_wraps_hybrid():

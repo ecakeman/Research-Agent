@@ -9,6 +9,7 @@ from app.generation.answer import generate_answer
 from app.generation.citations import validate_answer_citations
 from app.generation.compress import compress_evidence
 from app.generation.prompts import ANALYZE_PROMPT, GRADE_PROMPT, REWRITE_PROMPT
+from app.graph.evidence_gap import collect_evidence_gaps, format_evidence_summary
 from app.graph.sufficiency import evidence_sufficient
 from app.models.clients import GenerateResult, LLMClient
 from app.errors import RunError, find_run_error
@@ -155,14 +156,19 @@ def rerank(state: ResearchState, deps: GraphDeps) -> dict:
     t0 = time.perf_counter()
     chunks = [RetrievedChunk.model_validate(x) for x in state.get("retrieved_chunks") or []]
     query = state.get("rewritten_query") or state.get("normalized_query") or state["original_query"]
-    if deps.baseline == "vector" or deps.baseline == "hybrid":
-        ranked = []
-        for i, ch in enumerate(chunks[: deps.settings.rerank_top_k]):
-            row = ch.model_copy()
-            row.rank = i
-            ranked.append(row)
-    else:
-        ranked = deps.reranker.rank(query, chunks, deps.settings.rerank_top_k)
+    try:
+        if deps.baseline == "vector" or deps.baseline == "hybrid":
+            ranked = []
+            for i, ch in enumerate(chunks[: deps.settings.rerank_top_k]):
+                row = ch.model_copy()
+                row.rank = i
+                ranked.append(row)
+        else:
+            ranked = deps.reranker.rank(query, chunks, deps.settings.rerank_top_k)
+    except Exception as exc:
+        err = find_run_error(exc) or RunError(str(exc))
+        err.annotate(node="rerank")
+        raise err from exc
     payload = [h.model_dump() for h in ranked]
     _model_step(deps, state, "rerank", None, {"count": len(chunks)}, {"rerank_count": len(payload)}, t0)
     return {"reranked_chunks": payload}
@@ -210,11 +216,14 @@ def grade_evidence(state: ResearchState, deps: GraphDeps) -> dict:
             )
         )
     sufficient = evidence_sufficient(sub_qs, grades)
+    missing, gaps = collect_evidence_gaps(sub_qs, grades)
     kept = [g for g in grades if g.relevant and g.support_level in {"direct", "partial"}]
     out = {
         "graded_chunks": [g.model_dump() for g in grades],
         "evidence_chunks": [g.model_dump() for g in kept],
         "evidence_sufficient": sufficient,
+        "missing_sub_questions": missing,
+        "evidence_gaps": gaps,
         "model_calls": int(state.get("model_calls") or 0) + calls,
     }
     if not sufficient:
@@ -243,10 +252,9 @@ def rewrite_query(state: ResearchState, deps: GraphDeps) -> dict:
     t0 = time.perf_counter()
     role = ModelRole.FAST
     llm = deps.models.client(role)
-    summary = "; ".join(
-        (g.get("chunk_id") + ":" + (g.get("support_level") or ""))
-        for g in (state.get("graded_chunks") or [])[:8]
-    )
+    chunks = [RetrievedChunk.model_validate(x) for x in state.get("reranked_chunks") or []]
+    grades = [GradeResult.model_validate(x) for x in state.get("graded_chunks") or []]
+    summary = format_evidence_summary(chunks, grades)
     data, result = _call_json(
         llm,
         _messages(
@@ -254,6 +262,8 @@ def rewrite_query(state: ResearchState, deps: GraphDeps) -> dict:
             original_query=state["original_query"],
             sub_questions=state.get("sub_questions") or [],
             evidence_summary=summary or "(none)",
+            missing_sub_questions=state.get("missing_sub_questions") or [],
+            evidence_gaps=state.get("evidence_gaps") or [],
             failure_reasons=state.get("failure_reason") or "insufficient_evidence",
         ),
         node="rewrite_query",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app.config import settings
+from app.errors import RunError, find_run_error
 from app.models.clients import RerankClient
 from app.models.schemas import RetrievedChunk
 
@@ -25,14 +26,10 @@ class Reranker:
         payload = [ch.model_dump() for ch in chunks]
         try:
             ranked = self.client.rank(query, payload, k)
-        except Exception:
-            ranked = []
-            for i, ch in enumerate(chunks[:k]):
-                row = ch.model_copy()
-                row.rank = i
-                row.rerank_score = ch.score
-                ranked.append(row)
-            return ranked
+        except Exception as exc:
+            err = find_run_error(exc) or RunError(str(exc), node="rerank")
+            err.annotate(node="rerank")
+            raise err from exc
         by_id = {ch.chunk_id: ch for ch in chunks}
         out: list[RetrievedChunk] = []
         for i, item in enumerate(ranked[:k]):
