@@ -17,11 +17,15 @@ GRADE_PROMPT = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "Judge whether a chunk supports the research question. JSON only: "
+            "Judge support for the specific sub-question(s) this chunk covers, "
+            "not whether the chunk answers the entire research question. JSON only: "
             '{{"chunk_id":"...","relevant":true,"support_level":"direct|partial|weak|none",'
             '"reason":"...","covers":["sub_question text"]}}. '
-            "covers must be a subset of the given sub_questions. "
-            "direct means the chunk explicitly answers that sub-question.",
+            "A chunk can be direct evidence for one sub-question even if it does not "
+            "answer the whole research question. "
+            "Only mark support_level=direct when the chunk explicitly supports the covered "
+            "sub-question. Do not require the chunk to answer other sub-questions. "
+            "covers must contain only sub_questions explicitly supported by the chunk.",
         ),
         (
             "human",
@@ -35,13 +39,17 @@ REWRITE_PROMPT = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are a query rewriting component for retrieval. First identify the evidence gaps, "
-            "then write a targeted search query that would retrieve documents filling those gaps. "
+            "You are a query rewriting component for retrieval. "
+            "The previous retrieval round was insufficient. Do not answer the question. "
+            "1. Identify the unresolved sub-question(s). "
+            "2. Identify the missing evidence needed to answer them. "
+            "3. Generate a retrieval query specifically targeting that evidence. "
             'JSON only: {{"rewritten_query":"...","focus":["..."]}}. '
-            "focus must list the concrete missing sub-questions or evidence gaps. "
-            "You may extract retrieval terms from the original question, sub-questions, and observed evidence "
-            "(titles, sections, quotes). Do not guess answers. Do not invent facts, APIs, or systems "
-            "that do not appear in the inputs.",
+            "The rewritten query preserves original intent, keeps important technical terms, "
+            "uses terms from the original question, sub-questions and observed evidence, "
+            "targets the missing evidence, and avoids generic paraphrases. "
+            "Do not invent facts, APIs, systems or answers. "
+            "focus lists the concrete missing evidence or unresolved sub-question(s).",
         ),
         (
             "human",

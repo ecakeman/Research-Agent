@@ -90,6 +90,7 @@ def run_research(deps: GraphDeps, query: str, run_id: str) -> ResearchState:
         "graded_chunks": [],
         "evidence_chunks": [],
         "evidence_sufficient": False,
+        "first_pass_evidence_sufficient": None,
         "citations": [],
         "retrieval_round": 0,
         "max_retrieval_rounds": deps.max_retrieval_rounds or deps.settings.max_retrieval_rounds,

@@ -99,6 +99,7 @@ def test_live_eval_scores_sources_and_abstain(monkeypatch):
             "ranked_sources": ["langgraph"],
             "retrieval_rounds": 1,
             "rewritten_query": None,
+            "first_pass_evidence_sufficient": True,
         },
         {
             "run_id": "00000000-0000-0000-0000-000000000002",
@@ -107,6 +108,7 @@ def test_live_eval_scores_sources_and_abstain(monkeypatch):
             "ranked_sources": [],
             "retrieval_rounds": 2,
             "rewritten_query": "other",
+            "first_pass_evidence_sufficient": False,
         },
     ]
 
@@ -161,6 +163,7 @@ def test_live_citation_not_zeroed_by_false_abstain(monkeypatch):
             "citations": [{"chunk_id": "c1", "quote": "State"}],
             "ranked_sources": ["langgraph"],
             "retrieval_rounds": 1,
+            "first_pass_evidence_sufficient": True,
         },
         "miss": {
             "run_id": "r2",
@@ -169,6 +172,7 @@ def test_live_citation_not_zeroed_by_false_abstain(monkeypatch):
             "ranked_sources": ["langgraph"],
             "retrieval_rounds": 2,
             "rewritten_query": "x",
+            "first_pass_evidence_sufficient": False,
         },
     }
 

@@ -123,6 +123,7 @@ class ResearchState(TypedDict, total=False):
     graded_chunks: list[dict]
     evidence_chunks: list[dict]
     evidence_sufficient: bool
+    first_pass_evidence_sufficient: bool | None
     missing_sub_questions: list[str]
     evidence_gaps: list[str]
     compressed_context: str | None

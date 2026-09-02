@@ -92,9 +92,9 @@ Example:
 make eval BASELINE=agentic MODEL_ROUTING=dual CONCURRENCY=8
 ```
 
-指标接口：Recall@5 / Recall@10 / MRR / nDCG@10；Generation：Groundedness、Citation Precision/Recall、Abstention correctness；Agentic rewrite recovery 结构字段已预留。
+指标接口：Recall@5 / Recall@10 / MRR / nDCG@10（**source-level**：`expected_sources` 对 `documents.source_name`）；Generation：Groundedness、Citation Precision/Recall 仅 **completed**；Abstention 与 Failed 分列；Agentic rewrite recovery 用 Graph 记录的 `first_pass_evidence_sufficient`。
 
-非 live 的 `make eval` 对已 ingest 的库做检索层打分（`expected_sources` 对 `documents.source_name`），不调 LLM。Generation 与 rewrite_* 在未跑 `--live` 时为 **N/A**。`BASELINE=agentic` 非 live 与 hybrid+rerank 检索相同。Rerank HTTP 失败则退出，不编 Recall。空数据集时打印 `Evaluation dataset not ready`。
+非 live 的 `make eval` 对已 ingest 的库做检索层打分（`expected_sources` 对 `documents.source_name`），不调 LLM。Retrieval metrics are evaluated at source level. Generation 与 rewrite_* 在未跑 `--live` 时为 **N/A**。`BASELINE=agentic` 非 live 与 hybrid+rerank 检索相同。Rerank HTTP 失败则退出，不编 Recall。空数据集时打印 `Evaluation dataset not ready`。
 
 数字追溯：`eval/results/vector.json`、`hybrid.json`、`rerank.json`、`live_dual.json`、`live_single.json`。并发 `CONCURRENCY=8`。先前几次手工 `research ask` 与未完成的串行 live 只留下 `research_runs` 历史行，不改变 Graph 或知识库。
 

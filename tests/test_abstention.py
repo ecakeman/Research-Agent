@@ -3,7 +3,7 @@ from app.graph.workflow import run_research
 from app.models.routing import ModelRouter
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, is_rewrite_prompt
+from tests.fakes import FakeLLM, FakeReranker, is_grade_prompt, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
@@ -25,7 +25,7 @@ def test_f1_two_rounds_then_abstain():
                 "entities": ["LangGraph"],
                 "sub_questions": ["state", "control flow", "checkpointing"],
             }
-        if "Judge whether a chunk supports" in blob:
+        if is_grade_prompt(blob):
             return {
                 "chunk_id": "noise",
                 "relevant": False,

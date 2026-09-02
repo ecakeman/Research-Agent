@@ -5,7 +5,7 @@ from app.graph.workflow import run_research
 from app.models.routing import ModelRouter
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_rewrite_prompt
+from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_grade_prompt, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str, extra: str = "") -> RetrievedChunk:
@@ -36,7 +36,7 @@ def _base_handler(blob, _):
             "entities": ["LangGraph"],
             "sub_questions": ["state handling", "control flow", "checkpointing"],
         }
-    if "Judge whether a chunk supports" in blob:
+    if is_grade_prompt(blob):
         if "State stores" in blob:
             return {
                 "chunk_id": "c-good",
@@ -113,12 +113,18 @@ def run_g4():
         return [NOISE]
 
     state = run_research(_deps(FakeLLM(_base_handler), search), "Compare LangGraph with chains", "g4")
-    return state["status"] == "completed" and state["retrieval_round"] == 2 and state["evidence_sufficient"]
+    return (
+        state["status"] == "completed"
+        and state.get("first_pass_evidence_sufficient") is False
+        and bool(state.get("rewritten_query"))
+        and state["retrieval_round"] == 2
+        and state["evidence_sufficient"] is True
+    )
 
 
 def run_g5():
     def handler(blob, _):
-        if "Judge whether a chunk supports" in blob:
+        if is_grade_prompt(blob):
             return {"chunk_id": "c-noise", "relevant": False, "support_level": "none", "reason": "x", "covers": []}
         return _base_handler(blob, _)
 
@@ -127,7 +133,14 @@ def run_g5():
         "Compare LangGraph with chains",
         "g5",
     )
-    return state["status"] == "abstained" and state["failure_reason"] == "insufficient_evidence"
+    return (
+        state["status"] == "abstained"
+        and state.get("first_pass_evidence_sufficient") is False
+        and bool(state.get("rewritten_query"))
+        and state["retrieval_round"] == 2
+        and not state.get("evidence_sufficient")
+        and state["failure_reason"] == "insufficient_evidence"
+    )
 
 
 def run_g6():

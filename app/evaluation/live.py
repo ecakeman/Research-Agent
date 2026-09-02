@@ -33,10 +33,12 @@ def _step_totals(steps: list[dict]) -> dict:
         prompt += int(out.get("prompt_tokens") or 0)
         completion += int(out.get("completion_tokens") or 0)
         role = out.get("model_role")
-        if role == "pro":
-            pro += 1
-        elif role == "fast":
-            fast += 1
+        if role:
+            n = int(out["llm_calls"]) if "llm_calls" in out else 1
+            if role == "pro":
+                pro += n
+            elif role == "fast":
+                fast += n
     return {
         "latency_ms": latency,
         "prompt_tokens": prompt,
@@ -98,9 +100,15 @@ def score_live_case(case: dict, result: dict) -> dict:
     rounds = int(result.get("retrieval_rounds") or 0)
     gold_answerable = not expected_abs
     rewrite_attempted = rounds >= 2 or bool(result.get("rewritten_query"))
-    first_pass_insuf = rewrite_attempted or actual_abs
-    eligible = bool(first_pass_insuf and gold_answerable)
-    recovered = bool(rewrite_attempted and status == "completed" and eligible)
+    fps = result.get("first_pass_evidence_sufficient")
+    if fps is None:
+        first_pass_insuf = None
+        eligible = None
+        recovered = None
+    else:
+        first_pass_insuf = fps is False
+        eligible = bool(first_pass_insuf and gold_answerable)
+        recovered = bool(first_pass_insuf and gold_answerable and status == "completed")
     stats = _step_totals(steps)
     g = cp = cr = None
     if status == "completed":

@@ -1,9 +1,12 @@
+import pytest
+
+from app.errors import RunError
 from app.graph.nodes import GraphDeps, route_after_grade
 from app.graph.workflow import run_research
 from app.models.routing import ModelRouter
 from app.models.schemas import ResearchState, RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, is_rewrite_prompt
+from tests.fakes import FakeLLM, FakeReranker, is_grade_prompt, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
@@ -34,7 +37,7 @@ def test_f4_rewrite_then_sufficient():
                 "entities": ["LangGraph", "Chain"],
                 "sub_questions": ["state handling", "control flow", "checkpointing"],
             }
-        if "Judge whether a chunk supports" in blob:
+        if is_grade_prompt(blob):
             if "State stores" in blob:
                 return {
                     "chunk_id": "c-good",
@@ -82,6 +85,24 @@ def test_f4_rewrite_then_sufficient():
     assert state["evidence_sufficient"] is True
     assert state["status"] == "completed"
     assert state["citations"][0]["chunk_id"] == "c-good"
+
+
+def test_rerank_client_failure_fails_the_run():
+    class Boom:
+        def rank(self, query, chunks, top_n):
+            raise RuntimeError("rerank api down")
+
+    deps = GraphDeps(
+        models=ModelRouter.from_single_client(FakeLLM()),
+        search=lambda q, top_k=None: [_chunk("1", "first"), _chunk("2", "second")],
+        reranker=Reranker(Boom()),
+        conn=None,
+        baseline="agentic",
+        max_retrieval_rounds=1,
+    )
+    with pytest.raises(RunError) as ei:
+        run_research(deps, "What is LangGraph state?", "run-rerank-fail")
+    assert ei.value.node == "rerank"
 
 
 def test_route_after_grade_rewrites_only_before_max():

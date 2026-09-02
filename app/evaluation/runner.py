@@ -200,18 +200,15 @@ def summarize_live(rows: list[dict], baseline: str, model_routing: str) -> dict:
     abstain_exp = abstain_ok = 0
     first_insuf = rewrite_n = recovered = eligible_n = 0
     for row in rows:
-        if row.get("status") == "failed":
-            failed += 1
-            continue
         status = row.get("status")
-        if status == "abstained":
-            abstained += 1
-        elif status == "completed":
+        if status == "completed":
             completed += 1
+        elif status == "abstained":
+            abstained += 1
         else:
             failed += 1
-            continue
-        if row.get("recall_5") is not None:
+            status = "failed"
+        if status != "failed" and row.get("recall_5") is not None:
             r5.append(row["recall_5"])
             r10.append(row["recall_10"])
             mrrs.append(row["mrr"])
@@ -223,26 +220,23 @@ def summarize_live(rows: list[dict], baseline: str, model_routing: str) -> dict:
                 cps.append(row["citation_precision"])
             if row.get("citation_recall") is not None:
                 crs.append(row["citation_recall"])
-        if row.get("abstention_expected"):
-            abstain_exp += 1
-            if row.get("abstention_actual"):
-                abstain_ok += 1
+        if status in {"completed", "abstained"}:
+            if row.get("abstention_expected"):
+                abstain_exp += 1
+                if row.get("abstention_actual"):
+                    abstain_ok += 1
+            latencies.append(row.get("latency_ms") or 0)
+            tokens.append(row.get("total_tokens") or 0)
+            pro_calls.append(row.get("pro_calls") or 0)
+            fast_calls.append(row.get("fast_calls") or 0)
         if row.get("first_pass_insufficient"):
             first_insuf += 1
         if row.get("eligible_for_recovery"):
-            eligible_n += 1
-        elif row.get("eligible_for_recovery") is None and row.get("first_pass_insufficient") and not row.get(
-            "abstention_expected"
-        ):
             eligible_n += 1
         if row.get("rewrite_attempted"):
             rewrite_n += 1
         if row.get("rewrite_recovered"):
             recovered += 1
-        latencies.append(row.get("latency_ms") or 0)
-        tokens.append(row.get("total_tokens") or 0)
-        pro_calls.append(row.get("pro_calls") or 0)
-        fast_calls.append(row.get("fast_calls") or 0)
     n = len(rows)
     rec_rate = (recovered / eligible_n) if eligible_n else None
     return {
@@ -296,13 +290,14 @@ def print_eval_report(report: dict) -> None:
     print(f"Concurrency                 {fmt(report.get('concurrency'))}")
     print(f"Duration s                  {fmt(report.get('duration_s'))}")
     print(f"Cases                       {report.get('cases')}")
+    print(f"Total                       {fmt(report.get('total'))}")
     print(f"Completed                   {fmt(report.get('completed'))}")
     print(f"Abstained                   {fmt(report.get('abstained'))}")
     print(f"Failed                      {fmt(report.get('failed'))}")
     print(f"Abstention rate             {fmt(report.get('abstention_rate'))}")
     print(f"Failure rate                {fmt(report.get('failure_rate'))}")
     print("")
-    print("Retrieval")
+    print("Retrieval (source-level)")
     print(f"Recall@5                    {fmt(report.get('recall_5'))}")
     print(f"Recall@10                   {fmt(report.get('recall_10'))}")
     print(f"MRR                         {fmt(report.get('mrr'))}")

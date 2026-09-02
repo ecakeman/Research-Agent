@@ -1,10 +1,20 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.generation.citations import quote_from_chunk
 from app.generation.prompts import COMPRESS_PROMPT
 from app.ingestion.tokens import count_tokens
 from app.models.clients import LLMClient
 from app.models.schemas import EvidenceItem, GradeResult, RetrievedChunk
+
+
+@dataclass
+class CompressOutcome:
+    items: list[EvidenceItem]
+    llm_calls: int
+    input_tokens: int
+    output_tokens: int
 
 
 def _lc_messages(prompt, **kwargs) -> list[dict[str, str]]:
@@ -21,15 +31,20 @@ def compress_evidence(
     *,
     max_items: int,
     max_tokens: int,
-) -> list[EvidenceItem]:
+) -> CompressOutcome:
     grade_by_id = {g.chunk_id: g for g in grades}
     items: list[EvidenceItem] = []
     used = 0
+    llm_calls = 0
+    in_tok = out_tok = 0
     for ch in chunks:
         g = grade_by_id.get(ch.chunk_id)
         if g is None or not (g.relevant and g.support_level in {"direct", "partial"}):
             continue
-        claim, quote = _extract(llm, query, ch)
+        claim, quote, n_call, tin, tout = _extract(llm, query, ch)
+        llm_calls += n_call
+        in_tok += tin
+        out_tok += tout
         if not quote:
             continue
         item = EvidenceItem(
@@ -51,22 +66,27 @@ def compress_evidence(
         used += cost
         if len(items) >= max_items:
             break
-    return items
+    return CompressOutcome(items, llm_calls, in_tok, out_tok)
 
 
-def _extract(llm: LLMClient | None, query: str, ch: RetrievedChunk) -> tuple[str, str]:
+def _extract(llm: LLMClient | None, query: str, ch: RetrievedChunk) -> tuple[str, str, int, int, int]:
     text = ch.content
     if llm is None:
         quote = text.strip().split("\n")[0][:400]
-        return quote, quote if quote in text else text[:200]
+        if quote not in text:
+            quote = text[: min(200, len(text))]
+        return quote, quote, 0, 0, 0
     data = llm.generate_json(_lc_messages(COMPRESS_PROMPT, query=query, chunk=text))
+    last = getattr(llm, "last_result", None)
+    tin = int(getattr(last, "input_tokens", None) or 0) if last else 0
+    tout = int(getattr(last, "output_tokens", None) or 0) if last else 0
     quote = quote_from_chunk(text, str(data.get("quote") or ""))
     if not quote:
         quote = text.strip()[:400]
         if quote not in text:
             quote = text[: min(200, len(text))]
     claim = str(data.get("claim") or quote)[:500]
-    return claim, quote
+    return claim, quote, 1, tin, tout
 
 
 def format_evidence_for_prompt(items: list[EvidenceItem]) -> str:

@@ -90,6 +90,7 @@ def execute_research(query: str, *, baseline: str = "agentic", conn=None) -> dic
             "ranked_sources": ranked,
             "citation_attempts": state.get("citation_attempts"),
             "evidence_sufficient": state.get("evidence_sufficient"),
+            "first_pass_evidence_sufficient": state.get("first_pass_evidence_sufficient"),
             "rewritten_query": state.get("rewritten_query"),
         }
 

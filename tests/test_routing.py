@@ -5,7 +5,7 @@ from app.graph.workflow import GRAPH_NODES, build_graph, run_research
 from app.models.routing import ModelRole, ModelRouter, answer_role
 from app.models.schemas import RetrievedChunk
 from app.retrieval.rerank import Reranker
-from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_rewrite_prompt
+from tests.fakes import FakeLLM, FakeReranker, TaggedLLM, is_grade_prompt, is_rewrite_prompt
 
 
 def _chunk(cid: str, text: str) -> RetrievedChunk:
@@ -35,7 +35,7 @@ def _research_handler(blob, _):
             "entities": ["LangGraph", "Chain"],
             "sub_questions": ["state handling", "control flow", "checkpointing"],
         }
-    if "Judge whether a chunk supports" in blob:
+    if is_grade_prompt(blob):
         if "State stores" in blob:
             return {
                 "chunk_id": "c-good",

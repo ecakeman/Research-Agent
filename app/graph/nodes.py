@@ -66,6 +66,10 @@ def _model_step(
         extra["model_role"] = role.value
         extra["model_name"] = deps.models.model_name(role)
         extra.update(_usage_fields(result))
+        if "llm_calls" not in extra:
+            extra["llm_calls"] = 1
+        else:
+            extra["llm_calls"] = int(extra["llm_calls"])
     append_step(
         deps.conn,
         state.get("run_id") or "",
@@ -216,7 +220,7 @@ def grade_evidence(state: ResearchState, deps: GraphDeps) -> dict:
             )
         )
     sufficient = evidence_sufficient(sub_qs, grades)
-    missing, gaps = collect_evidence_gaps(sub_qs, grades)
+    missing, gaps = collect_evidence_gaps(sub_qs, grades, chunks)
     kept = [g for g in grades if g.relevant and g.support_level in {"direct", "partial"}]
     out = {
         "graded_chunks": [g.model_dump() for g in grades],
@@ -226,6 +230,8 @@ def grade_evidence(state: ResearchState, deps: GraphDeps) -> dict:
         "evidence_gaps": gaps,
         "model_calls": int(state.get("model_calls") or 0) + calls,
     }
+    if state.get("first_pass_evidence_sufficient") is None:
+        out["first_pass_evidence_sufficient"] = sufficient
     if not sufficient:
         out["failure_reason"] = "insufficient_evidence"
     usage = GenerateResult(
@@ -241,7 +247,7 @@ def grade_evidence(state: ResearchState, deps: GraphDeps) -> dict:
         "grade_evidence",
         role,
         {"graded_count": len(grades)},
-        {"sufficient": sufficient, "kept": len(kept)},
+        {"sufficient": sufficient, "kept": len(kept), "llm_calls": calls},
         t0,
         usage,
     )
@@ -283,7 +289,7 @@ def compress_node(state: ResearchState, deps: GraphDeps) -> dict:
     chunks = [RetrievedChunk.model_validate(x) for x in state.get("reranked_chunks") or []]
     grades = [GradeResult.model_validate(x) for x in state.get("graded_chunks") or []]
     try:
-        items = compress_evidence(
+        outcome = compress_evidence(
             llm,
             state["original_query"],
             chunks,
@@ -295,21 +301,30 @@ def compress_node(state: ResearchState, deps: GraphDeps) -> dict:
         err = find_run_error(exc) or RunError(str(exc))
         err.annotate(node="compress_evidence", model_role=role.value, model_name=deps.models.model_name(role))
         raise err from exc
+    items = outcome.items
     text = "\n".join(f"{it.chunk_id}: {it.quote}" for it in items)
     out = {
         "evidence_chunks": [it.model_dump() for it in items],
         "compressed_context": text,
-        **_bump_usage(state, len(items)),
+        **_bump_usage(state, outcome.llm_calls),
     }
+    last = getattr(llm, "last_result", None)
+    usage = GenerateResult(
+        text="",
+        input_tokens=outcome.input_tokens or None,
+        output_tokens=outcome.output_tokens or None,
+        total_tokens=(outcome.input_tokens + outcome.output_tokens) or None,
+        model=last.model if last else None,
+    )
     _model_step(
         deps,
         state,
         "compress_evidence",
         role,
         {"evidence_count": len(items)},
-        {"evidence_count": len(items)},
+        {"evidence_count": len(items), "llm_calls": outcome.llm_calls},
         t0,
-        getattr(llm, "last_result", None),
+        usage,
     )
     return out
 

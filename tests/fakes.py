@@ -34,6 +34,14 @@ class FakeLLM(LLMClient):
         return data
 
 
+def is_grade_prompt(blob: str) -> bool:
+    return (
+        "Judge whether a chunk supports" in blob
+        or "Judge support for the specific sub-question" in blob
+        or "specific sub-question(s) this chunk covers" in blob
+    )
+
+
 def is_rewrite_prompt(blob: str) -> bool:
     b = blob.lower()
     return "rewrite the search query" in b or "query rewriting component" in b
@@ -42,7 +50,7 @@ def is_rewrite_prompt(blob: str) -> bool:
 def _task(blob: str) -> str:
     if "analyze a technical research question" in blob.lower() or "You analyze a technical" in blob:
         return "analyze"
-    if "Judge whether a chunk supports" in blob:
+    if is_grade_prompt(blob):
         return "grade"
     if is_rewrite_prompt(blob):
         return "rewrite"
